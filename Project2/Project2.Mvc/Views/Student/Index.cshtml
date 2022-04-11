@@ -1,0 +1,44 @@
+﻿@model System.Collections.Generic.IEnumerable<Project2.Core.Dtos.StudentDto>
+<button type="button" class="btn btn-primary" style="margin-bottom: 10px;" onclick="createModal('@Url.Action("GetStudentById", "Student" , new {code=0 })')">
+    <i class="fa-solid fa-plus fa-lg"></i>New
+</button>
+@{
+    int i = 1;
+}
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Student Name</th>
+            <th scope="col">Student Surname</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model)
+        {
+            <tr>
+                <th scope="row">@i</th>
+                <td>@item.Name</td>
+                <td>@item.Surname</td>
+                <td style="display: flex;">
+                    <button type="button" class="btn btn-success" id="details-@item.Id" onclick="createModal('@Url.Action("GetStudentById", "Student" , new {id=item.Id })')"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <form asp-controller="Student" asp-action="DeleteStudent" asp-route-id="@item.Id" method="post">
+                        <button type="submit" class="btn btn-danger" style="margin-left: 6px;"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+
+                </td>
+            </tr>
+            i++;
+        }
+
+    </tbody>
+</table>
+<div class="modal" tabindex="-1" id="ModalPopUp" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.10.0.min.js" integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE=" crossorigin="anonymous"></script>

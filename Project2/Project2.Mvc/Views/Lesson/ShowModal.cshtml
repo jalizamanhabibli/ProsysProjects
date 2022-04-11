@@ -1,0 +1,61 @@
+﻿@{
+    SelectListItem[] items = {
+        new("1", "1"),
+        new("2", "2"),
+        new("3", "3"),
+        new("4", "4"),
+        new("5", "5"),
+        new("6", "6"),
+        new("7", "7"),
+        new("8", "8"),
+        new("9", "9"),
+        new("10", "10"),
+        new("11", "11"),
+            };
+}
+@model Project2.Core.Dtos.LessonDto
+@{
+    var action = Model == null ? "AddLesson" : "EditLesson";
+}
+<div class="modal-header">
+    <h5 class="modal-title">@(Model==null? "Add Lesson": "Edit Lesson")</h5>
+    <button type="button" class="close" data-dismiss="modal" onclick="clearModal()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form asp-controller="Lesson" asp-action="@action" method="post" id="form">
+        <div class="form-group">
+            <label for="code">Code</label>
+            <input type="text" class="form-control" asp-for="Code" placeholder="ABC..." required>
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="name">Lesson Name</label>
+            <input type="text" class="form-control" asp-for="Name" placeholder="Riyaziyyat...">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="class">Class</label>
+            <select asp-items="items" id="inputState" asp-for="Class" class="form-control">
+                <option>Choose select...</option>
+            </select>
+            <span asp-validation-for="Class" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="teacherName">Teacher Name</label>
+            <input type="text" class="form-control" asp-for="TeacherName" placeholder="Name...">
+            <span asp-validation-for="TeacherName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="teacherSurname">Teacher Surname</label>
+            <input type="text" class="form-control" asp-for="TeacherSurname" placeholder="Surname...">
+            <span asp-validation-for="TeacherSurname" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="sendForm()">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+<partial name="_ValidationScriptsPartial" />

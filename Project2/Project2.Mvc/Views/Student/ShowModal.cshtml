@@ -1,0 +1,52 @@
+﻿@{
+    SelectListItem[] items = {
+        new("1", "1"),
+        new("2", "2"),
+        new("3", "3"),
+        new("4", "4"),
+        new("5", "5"),
+        new("6", "6"),
+        new("7", "7"),
+        new("8", "8"),
+        new("9", "9"),
+        new("10", "10"),
+        new("11", "11"),
+            };
+}
+@model Project2.Core.Dtos.StudentDto
+@{
+    var action = Model == null ? "AddStudent" : "EditStudent";
+}
+<div class="modal-header">
+    <h5 class="modal-title"><h5 class="modal-title">@(Model==null? "Add Student": "Edit Student")</h5></h5>
+    <button type="button" class="close" data-dismiss="modal" onclick="clearModal()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form asp-controller="Student" asp-action="@action" method="post" id="form">
+        <input type="hidden" class="form-control" asp-for="Id">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" asp-for="Name" placeholder="Name...">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input type="text" class="form-control" asp-for="Surname" placeholder="Surname...">
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="class">Class</label>
+            <select asp-items="items" id="inputState" asp-for="Class" class="form-control">
+                <option>Choose select...</option>
+            </select>
+            <span asp-validation-for="Class" class = "text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="sendForm()">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+<partial name="_ValidationScriptsPartial" />

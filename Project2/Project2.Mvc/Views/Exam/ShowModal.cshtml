@@ -1,0 +1,96 @@
+﻿@using Project2.Core.Dtos
+@using Project2.Mvc.Rendering
+@model Project2.Core.Dtos.ExamDto
+@addTagHelper *, CustomTagHelpers
+
+@{
+    SelectListItem[] items = {
+        new("1", "1"),
+        new("2", "2"),
+        new("3", "3"),
+        new("4", "4"),
+        new("5", "5"),
+        new("6", "6"),
+        new("7", "7"),
+        new("8", "8"),
+        new("9", "9"),
+        new("10", "10"),
+        new("11", "11"),
+            };
+    var students = (IEnumerable<StudentDto>)ViewData["students"];
+    List<CustomOptionItem> optionsStudents = new List<CustomOptionItem>();
+    foreach (var student in students)
+    {
+        CustomOptionItem optionItem = new CustomOptionItem()
+                {
+                    Value = student.Id.ToString(),
+                    Text = $"{student.Id} - {student.Name} {student.Surname}",
+                    CustomDataKey = "select-data",
+                    CustomDataText = student.Class.ToString()
+                };
+        optionsStudents.Add(optionItem);
+    }
+
+    var lessons = (IEnumerable<LessonDto>)ViewData["lessons"];
+    List<CustomOptionItem> optionsLessons = new List<CustomOptionItem>();
+    foreach (var lesson in lessons)
+    {
+        CustomOptionItem optionItem = new CustomOptionItem()
+                {
+                    Value = lesson.Code,
+                    Text = $"{lesson.Name}",
+                    CustomDataKey = "select-data",
+                    CustomDataText = lesson.Class.ToString()
+                };
+        optionsLessons.Add(optionItem);
+    }
+}
+
+@{
+    var action = Model.Id == 0 ? "AddExam" : "EditExam";
+}
+<div class="modal-header">
+    <h5 class="modal-title">@(Model.Id==0? "Add Exam": "Edit Exam")</h5>
+    <button type="button" class="close" data-dismiss="modal" onclick="clearModal()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form asp-controller="Exam" asp-action="@action" method="post" id="form">
+        <input type="hidden" class="form-control" asp-for="Id">
+        <div class="form-group">
+            <label>Student Name And Surname</label>
+            <select id="itemsStudents" asp-for="StudentId" class="form-control">
+                <option value="0">Choose select...</option>
+                <options items="optionsStudents" selected-value="@Model.StudentId"></options>
+            </select>
+            <span asp-validation-for="StudentId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Lesson</label>
+
+            <select id="itemsLessons" asp-for="LessonCode" class="form-control">
+                <option value="">Choose select...</option>
+                <options items="optionsLessons" selected-value="@Model.LessonCode"></options>
+            </select>
+            <span asp-validation-for="LessonCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>Score</label>
+            <input type="number" class="form-control" asp-for="Score" placeholder="Name...">
+            <span asp-validation-for="Score" class="text-danger"></span>
+
+        </div>
+        <div id="date-picker-example" inline="true">
+            <label>Date</label>
+            <input placeholder="Select date" type="date" asp-for="ExamDate" class="form-control">
+            <span asp-validation-for="ExamDate" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="sendForm()">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
